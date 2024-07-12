@@ -15,8 +15,21 @@ exporters:
     tls:
       insecure: true
 
+processors:
+  transform:
+    error_mode: ignore
+    trace_statements:
+      - context: span
+        statements:
+          # Set the service name to the name of the rust module
+          # Given how the codebase is structured, this will
+          # effectively give us microservice-style tracing in
+          # a monolith
+          - set(resource.attributes["service.name"], attributes["svc"])
+
 service:
   pipelines:
     traces:
       receivers: [otlp]
+      processors: [transform]
       exporters: [otlp, debug]

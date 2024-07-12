@@ -91,7 +91,8 @@ services:
     volumes:
       - ./volumes/opentelemetry-collector/otelcol-config.yml:/etc/otelcol-config.yml
     ports:
-      - "4318"          # OTLP over HTTP receiver
+      - "4317:4317"          # added by cj
+      - "4318:4318"          # OTLP over HTTP receiver
     depends_on:
       - tempo
 
@@ -103,7 +104,7 @@ services:
       - ./volumes/tempo/data:/tmp/tempo
     ports:
       - "3200:3200"   # tempo metrics
-      - "4318:4318"  # otlp http
+      - "4318"  # otlp http
     depends_on:
       - minio
 
